@@ -1,0 +1,109 @@
+version: '3.6'
+services:
+  
+  #PHP Main Service
+  php8_0:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    image: slim_php_challenge/php
+    container_name: php8_0
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: php8_0
+      SERVICE_TAGS: dev
+      PHP_IDE_CONFIG: "serverName=php_slim"
+    working_dir: /var/www
+    ports:
+      - "9003:9000"
+    volumes:
+      - ./src/:/var/www
+      - ./php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    networks:
+      - app-network
+
+  #PHP AMQP Receiver
+  php_rabbitmq_receiver:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    image: slim_php_challenge/php
+    container_name: php_rabbitmq_receiver
+    restart: unless-stopped
+    tty: true
+    command: "php /var/www/consumer.php"
+    environment:
+      SERVICE_NAME: php8_0
+      SERVICE_TAGS: dev
+      PHP_IDE_CONFIG: "serverName=php_slim"
+    working_dir: /var/www
+    ports:
+      - "9004:9000"
+    volumes:
+      - ./src/:/var/www
+      - ./php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    networks:
+      - app-network
+    depends_on:
+      - php8_0
+#      - rabbitmq
+      - mysql
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:80"
+      - "444:443"
+    volumes:
+      - ./src/:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  #MySQL Service
+  mysql:
+    image: mysql:5.7.22
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: slim_php_challenge
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: my_user
+      MYSQL_PASSWORD: my_pass
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+#  rabbitmq:
+#    image: "rabbitmq:3-management"
+#    ports:
+#      - "15672:15672"
+#      - "5672:5672"
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
+#    volumes:
+#      - './rabbitmq/data:/data'
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local

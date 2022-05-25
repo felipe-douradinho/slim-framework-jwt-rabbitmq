@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "86bd8b78-5762-4227-9da7-7c47f5290915",
+		"name": "slim",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "113262"
+	},
+	"item": [
+		{
+			"name": "Get Stocks (authenticated)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozfQ.fQnvpFpafTilfUZmvyXJRVkqNDjYRr8nVzaQbMlg9p8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.56.56:8080/api/v1/stocks?XDEBUG_SESSION=PHPSTORM&symbol=aapl.us",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"56",
+						"56"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"stocks"
+					],
+					"query": [
+						{
+							"key": "XDEBUG_SESSION",
+							"value": "PHPSTORM"
+						},
+						{
+							"key": "symbol",
+							"value": "aapl.us"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Quotes (authenticated) Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozfQ.fQnvpFpafTilfUZmvyXJRVkqNDjYRr8nVzaQbMlg9p8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.56.56:8080/api/v1/quotes?XDEBUG_SESSION=PHPSTORM",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"56",
+						"56"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"quotes"
+					],
+					"query": [
+						{
+							"key": "XDEBUG_SESSION",
+							"value": "PHPSTORM"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register new User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "New Name",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "dddddd@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://192.168.56.56:8080/api/v1/users?XDEBUG_SESSION=PHPSTORM",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"56",
+						"56"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "XDEBUG_SESSION",
+							"value": "PHPSTORM"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
